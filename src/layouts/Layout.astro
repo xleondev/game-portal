@@ -1,0 +1,49 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Free browser games — play instantly, no download needed.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Google AdSense — replace YOUR_PUBLISHER_ID with ca-pub-XXXXXXXXXX -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_PUBLISHER_ID"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #0f0f1a;
+        color: #e0e0e0;
+      }
+      header {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #222;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      header a { color: #e0e0e0; text-decoration: none; font-weight: bold; font-size: 1.25rem; }
+      main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/">🎮 Game Portal</a>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
