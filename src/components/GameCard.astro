@@ -1,0 +1,43 @@
+---
+import type { Game } from '../data/games';
+interface Props {
+  game: Game;
+}
+const { game } = Astro.props;
+---
+<a href={`/games/${game.slug}/`} class="card">
+  <img src={game.thumbnail} alt={`${game.title} preview`} loading="lazy" />
+  <div class="card-body">
+    <h2>{game.title}</h2>
+    <p>{game.description}</p>
+    <div class="tags">
+      {game.tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: #5555aa; }
+  .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #111; }
+  .card-body { padding: 1rem; }
+  .card-body h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+  .card-body p { margin: 0 0 0.75rem; font-size: 0.875rem; color: #aaa; line-height: 1.4; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .tag {
+    background: #2a2a4a;
+    color: #aaa;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+</style>
