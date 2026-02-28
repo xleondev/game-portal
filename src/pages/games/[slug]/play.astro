@@ -1,0 +1,52 @@
+---
+import { games, getGame } from '../../../data/games';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return games.map((game) => ({ params: { slug: game.slug } }));
+};
+
+const { slug } = Astro.params;
+const game = getGame(slug!);
+if (!game) return Astro.redirect('/');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{game.title} — Play</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #000; display: flex; flex-direction: column; height: 100vh; }
+      .bar {
+        background: #111;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-shrink: 0;
+      }
+      .bar a { color: #aaa; text-decoration: none; font-size: 0.875rem; }
+      .bar a:hover { color: #fff; }
+      .bar h1 { color: #fff; font-size: 0.875rem; font-weight: normal; flex: 1; }
+      iframe {
+        flex: 1;
+        border: none;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <a href={`/games/${game.slug}/`}>← Back</a>
+      <h1>{game.title}</h1>
+      <a href="/">🎮 All Games</a>
+    </div>
+    <iframe
+      src={`/games/${game.slug}/index.html`}
+      title={game.title}
+      allowfullscreen
+    ></iframe>
+  </body>
+</html>
