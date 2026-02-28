@@ -3,7 +3,7 @@
     "slug": "astro-dash",
     "title": "Astro Dash",
     "description": "An 8-bit endless runner — jump, slide, and dodge obstacles across three increasingly dangerous space zones. Survive long enough to face the boss.",
-    "thumbnail": "/placeholder-thumbnail.svg",
+    "thumbnail": "/games/astro-dash/thumbnail.svg",
     "tags": ["runner", "arcade", "8-bit"],
     "featured": true,
     "publishedAt": "2026-02-28"
