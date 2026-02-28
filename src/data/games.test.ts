@@ -12,6 +12,8 @@ describe('games data', () => {
       expect(game.title).toBeTruthy();
       expect(game.description).toBeTruthy();
       expect(game.tags).toBeInstanceOf(Array);
+      expect(game.thumbnail).toBeTruthy();
+      expect(game.publishedAt).toBeTruthy();
     }
   });
 

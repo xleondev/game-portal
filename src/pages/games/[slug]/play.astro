@@ -47,6 +47,7 @@ if (!game) return Astro.redirect('/');
       src={`/games/${game.slug}/index.html`}
       title={game.title}
       allowfullscreen
+      sandbox="allow-scripts allow-same-origin"
     ></iframe>
   </body>
 </html>
