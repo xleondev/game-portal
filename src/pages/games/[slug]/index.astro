@@ -1,0 +1,56 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import { games, getGame } from '../../../data/games';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return games.map((game) => ({ params: { slug: game.slug } }));
+};
+
+const { slug } = Astro.params;
+const game = getGame(slug!);
+if (!game) return Astro.redirect('/');
+---
+<Layout title={`${game.title} — Game Portal`} description={game.description}>
+  <div class="detail">
+    <AdSlot slot="DETAIL_TOP_SLOT_ID" />
+
+    <div class="hero">
+      <img src={game.thumbnail} alt={`${game.title} preview`} class="thumbnail" />
+      <div class="info">
+        <h1>{game.title}</h1>
+        <p>{game.description}</p>
+        <div class="tags">
+          {game.tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+        <a href={`/games/${game.slug}/play/`} class="play-btn">▶ Play Now</a>
+      </div>
+    </div>
+
+    <AdSlot slot="DETAIL_BOTTOM_SLOT_ID" />
+  </div>
+</Layout>
+
+<style>
+  .detail { display: flex; flex-direction: column; gap: 1.5rem; }
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+  @media (max-width: 640px) { .hero { grid-template-columns: 1fr; } }
+  .thumbnail { width: 100%; border-radius: 8px; }
+  h1 { margin: 0 0 0.75rem; }
+  p { color: #aaa; line-height: 1.6; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 1.5rem; }
+  .tag { background: #2a2a4a; color: #aaa; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; }
+  .play-btn {
+    display: inline-block;
+    background: #5555aa;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background 0.15s;
+  }
+  .play-btn:hover { background: #7777cc; }
+</style>
