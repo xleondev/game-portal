@@ -1,17 +1,36 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import GameCard from '../components/GameCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { games } from '../data/games';
 ---
+<Layout title="Game Portal — Free Browser Games">
+  <h1>Free Browser Games</h1>
+  <p class="subtitle">Play instantly — no download, no login.</p>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <div class="grid">
+    {games.map((game, i) => (
+      <>
+        <GameCard game={game} />
+        {(i + 1) % 6 === 0 && (
+          <div class="ad-row">
+            <AdSlot slot="HOMEPAGE_SLOT_ID" />
+          </div>
+        )}
+      </>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  h1 { margin: 0 0 0.25rem; font-size: 2rem; }
+  .subtitle { color: #888; margin: 0 0 2rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .ad-row {
+    grid-column: 1 / -1;
+  }
+</style>
