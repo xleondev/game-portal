@@ -2,7 +2,7 @@
 
 Live site: https://games.xleon.dev
 Stack: Astro v5, Vanilla CSS, Netlify, Google AdSense
-Deploy: `git push` → Netlify auto-deploys from `main`
+Deploy: `git push` → Netlify auto-deploys from `main` (costs build minutes — push only when done)
 
 ## Critical Convention
 
@@ -54,6 +54,20 @@ Games can run JS and access same-origin resources. They cannot navigate the pare
 ## AdSlot Known Issue
 
 Astro v5 deduplicates `<script>` tags. The `adsbygoogle.push({})` call in AdSlot.astro **must** use `is:inline` to fire once per ad unit.
+
+## Deploy Policy
+
+**Every `git push` triggers a Netlify build. Push sparingly.**
+
+Workflow:
+1. Work and commit locally (`git commit` freely — no cost)
+2. Test with `npm run dev` and `npm test`
+3. Batch all changes into one push when everything is verified
+
+Only push when:
+- All tests pass (`npm test`)
+- Game works locally (`npm run dev` → Play Now → iframe loads)
+- No more changes planned for this session
 
 ## Local Dev
 
