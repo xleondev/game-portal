@@ -155,7 +155,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // Difficulty ramp every 30s
-    this.time.addEvent({
+    this.rampTimer = this.time.addEvent({
       delay: 30000,
       callback: this._rampDifficulty,
       callbackScope: this,
@@ -256,6 +256,7 @@ class GameScene extends Phaser.Scene {
     g.body.setVelocityY(-def.speed * this.speedMult);
     g.body.setAllowGravity(false);
     g.body.setSize(r * 2, r * 2.4);
+    g.body.setOffset(-r, -r * 1.2); // center hitbox on the drawn ellipse
 
     // Metadata
     g.balloonType = typeName;
@@ -294,11 +295,13 @@ class GameScene extends Phaser.Scene {
   }
 
   _loseLife() {
+    if (this.lives <= 0) return; // already dead, prevent double-transition
     this.lives--;
     const hearts = '❤️'.repeat(Math.max(0, this.lives));
     this.livesTxt.setText(hearts || '💀');
     if (this.lives <= 0) {
       this.spawnTimer.remove();
+      this.rampTimer.remove();
       this.time.delayedCall(400, () => {
         this.scene.start('GameOverScene', { score: this.score });
       });
