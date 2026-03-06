@@ -458,7 +458,7 @@ class GameOverScene extends Phaser.Scene {
       Phaser.Geom.Rectangle.Contains
     );
 
-    const btnLabel = this.add.text(width / 2, height * 0.63 + 27, 'PLAY AGAIN', {
+    this.add.text(width / 2, height * 0.63 + 27, 'PLAY AGAIN', {
       fontSize: '28px',
       fontFamily: 'Arial Black, sans-serif',
       fontStyle: 'bold',
@@ -468,11 +468,13 @@ class GameOverScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     btnBg.on('pointerover', () => {
+      this.input.setDefaultCursor('pointer');
       btnBg.clear();
       btnBg.fillStyle(0x44CC66, 1);
       btnBg.fillRoundedRect(width / 2 - 110, height * 0.63, 220, 54, 14);
     });
     btnBg.on('pointerout', () => {
+      this.input.setDefaultCursor('default');
       btnBg.clear();
       btnBg.fillStyle(0x22AA44, 1);
       btnBg.fillRoundedRect(width / 2 - 110, height * 0.63, 220, 54, 14);
