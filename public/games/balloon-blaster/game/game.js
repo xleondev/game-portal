@@ -394,6 +394,106 @@ class GameScene extends Phaser.Scene {
   }
 }
 
+// ─── GameOverScene ────────────────────────────────────────────────────────────
+class GameOverScene extends Phaser.Scene {
+  constructor() { super('GameOverScene'); }
+
+  init(data) {
+    this.finalScore = data.score ?? 0;
+  }
+
+  create() {
+    const { width, height } = this.scale;
+
+    // Background
+    const bg = this.add.graphics();
+    bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x16213e, 0x16213e, 1);
+    bg.fillRect(0, 0, width, height);
+
+    // Game Over text
+    this.add.text(width / 2, height * 0.22, 'GAME OVER', {
+      fontSize: '48px',
+      fontFamily: 'Arial Black, sans-serif',
+      fontStyle: 'bold',
+      color: '#FF4444',
+      stroke: '#880000',
+      strokeThickness: 6,
+    }).setOrigin(0.5);
+
+    // Score
+    this.add.text(width / 2, height * 0.40, `Score: ${this.finalScore}`, {
+      fontSize: '32px',
+      fontFamily: 'Arial Black, sans-serif',
+      color: '#FFFFFF',
+      stroke: '#0055AA',
+      strokeThickness: 4,
+    }).setOrigin(0.5);
+
+    // High score
+    const prev = parseInt(localStorage.getItem('balloonBlaster_hi') || '0', 10);
+    const isNew = this.finalScore > prev;
+    if (isNew) {
+      localStorage.setItem('balloonBlaster_hi', String(this.finalScore));
+      this.add.text(width / 2, height * 0.50, '🏆 New Best!', {
+        fontSize: '24px',
+        fontFamily: 'Arial, sans-serif',
+        color: '#FFD700',
+      }).setOrigin(0.5);
+    } else {
+      this.add.text(width / 2, height * 0.50, `Best: ${prev}`, {
+        fontSize: '22px',
+        fontFamily: 'Arial, sans-serif',
+        color: '#FFF9C4',
+        stroke: '#885500',
+        strokeThickness: 3,
+      }).setOrigin(0.5);
+    }
+
+    // Play Again button
+    const btnBg = this.add.graphics();
+    btnBg.fillStyle(0x22AA44, 1);
+    btnBg.fillRoundedRect(width / 2 - 110, height * 0.63, 220, 54, 14);
+    btnBg.setInteractive(
+      new Phaser.Geom.Rectangle(width / 2 - 110, height * 0.63, 220, 54),
+      Phaser.Geom.Rectangle.Contains
+    );
+
+    const btnLabel = this.add.text(width / 2, height * 0.63 + 27, 'PLAY AGAIN', {
+      fontSize: '28px',
+      fontFamily: 'Arial Black, sans-serif',
+      fontStyle: 'bold',
+      color: '#FFFFFF',
+      stroke: '#006622',
+      strokeThickness: 4,
+    }).setOrigin(0.5);
+
+    btnBg.on('pointerover', () => {
+      btnBg.clear();
+      btnBg.fillStyle(0x44CC66, 1);
+      btnBg.fillRoundedRect(width / 2 - 110, height * 0.63, 220, 54, 14);
+    });
+    btnBg.on('pointerout', () => {
+      btnBg.clear();
+      btnBg.fillStyle(0x22AA44, 1);
+      btnBg.fillRoundedRect(width / 2 - 110, height * 0.63, 220, 54, 14);
+    });
+    btnBg.on('pointerdown', () => this.scene.start('MenuScene'));
+
+    // Menu button
+    const menuBtn = this.add.text(width / 2, height * 0.76, 'Main Menu', {
+      fontSize: '20px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#AAAAAA',
+      stroke: '#000000',
+      strokeThickness: 2,
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    menuBtn.on('pointerover', () => menuBtn.setColor('#FFFFFF'));
+    menuBtn.on('pointerout',  () => menuBtn.setColor('#AAAAAA'));
+    menuBtn.on('pointerdown', () => this.scene.start('MenuScene'));
+  }
+}
+
 // ─── Phaser config ────────────────────────────────────────────────────────────
 const config = {
   type: Phaser.AUTO,
@@ -409,7 +509,7 @@ const config = {
     default: 'arcade',
     arcade: { gravity: { y: 0 }, debug: false }
   },
-  scene: [MenuScene, GameScene]
+  scene: [MenuScene, GameScene, GameOverScene]
 };
 
 new Phaser.Game(config);
