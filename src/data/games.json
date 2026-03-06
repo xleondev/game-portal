@@ -7,5 +7,14 @@
     "tags": ["runner", "arcade", "8-bit"],
     "featured": true,
     "publishedAt": "2026-02-28"
+  },
+  {
+    "slug": "balloon-blaster",
+    "title": "Balloon Blaster",
+    "description": "Aim your cannon and pop colorful balloons before they escape! Special balloons bring chain explosions and bonus points — how long can you survive?",
+    "thumbnail": "/games/balloon-blaster/thumbnail.svg",
+    "tags": ["shooter", "arcade", "casual"],
+    "featured": false,
+    "publishedAt": "2026-03-06"
   }
 ]
