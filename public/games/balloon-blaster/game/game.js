@@ -149,10 +149,20 @@ class GameScene extends Phaser.Scene {
     // HUD (drawn last so it's on top)
     this._buildHUD();
 
+    // Hint text — fades out after 3 seconds
+    const hint = this.add.text(width / 2, height * 0.5, '🎈 Click to shoot!', {
+      fontSize: '20px', fontFamily: 'Arial, sans-serif',
+      color: '#FFFFFF', stroke: '#000000', strokeThickness: 3,
+    }).setOrigin(0.5).setDepth(10);
+    this.tweens.add({ targets: hint, alpha: 0, delay: 2000, duration: 1000, onComplete: () => hint.destroy() });
+
     // Difficulty state
     this.elapsed = 0;
-    this.spawnDelay = 1800; // ms between spawns (decreases over time)
+    this.spawnDelay = 1200; // ms between spawns (starts faster)
     this.speedMult  = 1.0;
+
+    // Spawn first balloon immediately so the player sees action right away
+    this._spawnBalloon();
 
     // Spawn timer
     this.spawnTimer = this.time.addEvent({
