@@ -145,7 +145,7 @@ class GameScene extends Phaser.Scene {
     this.cannonPivot.setRotation(angle);
   }
 
-  _fireBullet(ptr) {
+  _fireBullet(_ptr) {
     const now = this.time.now;
     if (now - this.lastFired < this.fireCooldown) return;
     this.lastFired = now;
@@ -174,9 +174,9 @@ class GameScene extends Phaser.Scene {
   }
 
   update() {
-    // Destroy bullets that leave the screen
-    this.bullets.getChildren().forEach(b => {
-      if (b.y < -20 || b.x < -20 || b.x > this.scale.width + 20) b.destroy();
+    // Destroy bullets that leave the screen (slice() prevents mutation-during-iteration)
+    this.bullets.getChildren().slice().forEach(b => {
+      if (b.active && (b.y < -20 || b.x < -20 || b.x > this.scale.width + 20)) b.destroy();
     });
   }
 }
