@@ -138,6 +138,14 @@ class GameScene extends Phaser.Scene {
     this.bullets = this.physics.add.group();
     this.balloons = this.physics.add.group();
 
+    this.physics.add.overlap(
+      this.bullets,
+      this.balloons,
+      this._onHit,
+      null,
+      this
+    );
+
     // HUD (drawn last so it's on top)
     this._buildHUD();
 
@@ -203,6 +211,82 @@ class GameScene extends Phaser.Scene {
     this.livesTxt = this.add.text(width - 12, 12, '❤️❤️❤️', {
       fontSize: '20px', fontFamily: 'Arial, sans-serif',
     }).setOrigin(1, 0);
+  }
+
+  _onHit(bullet, balloon) {
+    bullet.destroy();
+    balloon.hp--;
+
+    if (balloon.hp > 0) {
+      // Tank balloon: flash white to show damage
+      this.tweens.add({
+        targets: balloon,
+        alpha: 0.3,
+        duration: 80,
+        yoyo: true,
+      });
+      return;
+    }
+
+    // Pop!
+    this._popBalloon(balloon);
+  }
+
+  _popBalloon(balloon) {
+    const { x, y } = balloon;
+    const typeName = balloon.balloonType;
+
+    // Score
+    this.score += balloon.points;
+    this.scoreTxt.setText(`Score: ${this.score}`);
+
+    // Pop particle burst (circles expanding outward)
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      const color = balloon.getData?.('color') ?? 0xFFAAAA;
+      const particle = this.add.circle(x, y, 5, color);
+      this.tweens.add({
+        targets: particle,
+        x: x + Math.cos(angle) * 40,
+        y: y + Math.sin(angle) * 40,
+        alpha: 0,
+        scaleX: 0.3,
+        scaleY: 0.3,
+        duration: 350,
+        onComplete: () => particle.destroy(),
+      });
+    }
+
+    // Bomb chain explosion
+    if (typeName === 'bomb') {
+      this._chainExplosion(x, y);
+    }
+
+    balloon.destroy();
+  }
+
+  _chainExplosion(x, y) {
+    const radius = 90;
+    // Flash ring
+    const ring = this.add.circle(x, y, 10, 0xFF6600, 0.8);
+    this.tweens.add({
+      targets: ring,
+      scaleX: radius / 10,
+      scaleY: radius / 10,
+      alpha: 0,
+      duration: 300,
+      onComplete: () => ring.destroy(),
+    });
+
+    // Destroy nearby balloons
+    const nearby = this.balloons.getChildren().filter(b => {
+      return b.active && Phaser.Math.Distance.Between(x, y, b.x, b.y) <= radius;
+    });
+    nearby.forEach(b => {
+      this.time.delayedCall(Phaser.Math.Between(0, 150), () => {
+        if (b.active) this._popBalloon(b);
+      });
+    });
   }
 
   _pickBalloonType() {
