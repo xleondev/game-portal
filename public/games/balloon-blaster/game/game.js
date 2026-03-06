@@ -185,7 +185,10 @@ class GameScene extends Phaser.Scene {
     this.cannonPivot.setRotation(angle);
   }
 
-  _fireBullet(_ptr) {
+  _fireBullet(ptr) {
+    // Update aim on click/tap (needed for touch devices where pointerdown fires without pointermove)
+    this._aimCannon(ptr);
+
     const now = this.time.now;
     if (now - this.lastFired < this.fireCooldown) return;
     this.lastFired = now;
@@ -214,6 +217,7 @@ class GameScene extends Phaser.Scene {
   }
 
   _onHit(bullet, balloon) {
+    if (!bullet.active || !balloon.active) return;
     bullet.destroy();
     balloon.hp--;
 
