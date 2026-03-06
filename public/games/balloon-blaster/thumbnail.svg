@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Sky background -->
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="100%" stop-color="#4A90D9"/>
+    </radialGradient>
+    <radialGradient id="balloonRed" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#CC0000"/>
+    </radialGradient>
+    <radialGradient id="balloonYellow" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FFE566"/>
+      <stop offset="100%" stop-color="#FFA500"/>
+    </radialGradient>
+    <radialGradient id="balloonBlue" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#66B3FF"/>
+      <stop offset="100%" stop-color="#0055CC"/>
+    </radialGradient>
+    <radialGradient id="balloonGold" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#sky)"/>
+
+  <!-- Clouds -->
+  <ellipse cx="80" cy="60" rx="40" ry="20" fill="white" opacity="0.8"/>
+  <ellipse cx="110" cy="50" rx="30" ry="18" fill="white" opacity="0.8"/>
+  <ellipse cx="60" cy="55" rx="25" ry="15" fill="white" opacity="0.8"/>
+  <ellipse cx="300" cy="80" rx="35" ry="18" fill="white" opacity="0.7"/>
+  <ellipse cx="330" cy="70" rx="28" ry="16" fill="white" opacity="0.7"/>
+
+  <!-- Red balloon -->
+  <ellipse cx="120" cy="100" rx="35" ry="42" fill="url(#balloonRed)"/>
+  <ellipse cx="108" cy="88" rx="10" ry="12" fill="white" opacity="0.3"/>
+  <path d="M120 142 Q115 155 120 160" stroke="#CC0000" stroke-width="2" fill="none"/>
+  <line x1="120" y1="160" x2="120" y2="185" stroke="#888" stroke-width="1.5"/>
+
+  <!-- Yellow balloon -->
+  <ellipse cx="200" cy="80" rx="38" ry="46" fill="url(#balloonYellow)"/>
+  <ellipse cx="187" cy="66" rx="11" ry="13" fill="white" opacity="0.3"/>
+  <path d="M200 126 Q195 139 200 144" stroke="#FFA500" stroke-width="2" fill="none"/>
+  <line x1="200" y1="144" x2="200" y2="175" stroke="#888" stroke-width="1.5"/>
+
+  <!-- Blue balloon -->
+  <ellipse cx="300" cy="110" rx="32" ry="38" fill="url(#balloonBlue)"/>
+  <ellipse cx="289" cy="99" rx="9" ry="11" fill="white" opacity="0.3"/>
+  <path d="M300 148 Q295 159 300 164" stroke="#0055CC" stroke-width="2" fill="none"/>
+  <line x1="300" y1="164" x2="300" y2="190" stroke="#888" stroke-width="1.5"/>
+
+  <!-- Golden balloon (small, top right) -->
+  <ellipse cx="360" cy="55" rx="22" ry="27" fill="url(#balloonGold)"/>
+  <ellipse cx="352" cy="46" rx="6" ry="8" fill="white" opacity="0.4"/>
+  <path d="M360 82 Q357 90 360 93" stroke="#B8860B" stroke-width="1.5" fill="none"/>
+  <line x1="360" y1="93" x2="360" y2="110" stroke="#888" stroke-width="1"/>
+
+  <!-- Ground -->
+  <rect x="0" y="255" width="400" height="45" fill="#5D8A3C"/>
+  <rect x="0" y="255" width="400" height="8" fill="#7AB648"/>
+
+  <!-- Cannon base -->
+  <ellipse cx="200" cy="265" rx="35" ry="12" fill="#4A4A4A"/>
+  <rect x="175" y="255" width="50" height="18" rx="5" fill="#555"/>
+
+  <!-- Cannon barrel (angled ~-45deg pointing upper-right) -->
+  <g transform="translate(200, 258) rotate(-50)">
+    <rect x="-8" y="-45" width="16" height="48" rx="6" fill="#333"/>
+    <rect x="-6" y="-43" width="5" height="20" rx="3" fill="#555"/>
+    <!-- Muzzle -->
+    <ellipse cx="0" cy="-45" rx="9" ry="6" fill="#222"/>
+  </g>
+
+  <!-- Projectile in flight -->
+  <circle cx="248" cy="190" r="5" fill="#FFD700"/>
+  <ellipse cx="244" cy="193" rx="4" ry="2" fill="#FFA500" opacity="0.5" transform="rotate(-45, 244, 193)"/>
+
+  <!-- Title -->
+  <text x="200" y="30" font-family="Arial Black, sans-serif" font-size="22" font-weight="900"
+        fill="white" text-anchor="middle" stroke="#0055AA" stroke-width="3" paint-order="stroke">
+    BALLOON BLASTER
+  </text>
+</svg>
