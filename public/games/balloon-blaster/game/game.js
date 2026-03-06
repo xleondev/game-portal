@@ -1,3 +1,14 @@
+// ─── Balloon types config ─────────────────────────────────────────────────────
+const BALLOON_TYPES = {
+  normal: { color: null, speed: 90,  points: 10, hp: 1, weight: 60 },
+  fast:   { color: 0xFF2222, speed: 180, points: 20, hp: 1, weight: 20 },
+  tank:   { color: 0x6A0DAD, speed: 65,  points: 30, hp: 2, weight: 15 },
+  golden: { color: 0xFFD700, speed: 75,  points: 50, hp: 1, weight: 3  },
+  bomb:   { color: 0x111111, speed: 80,  points: 25, hp: 1, weight: 2  },
+};
+
+const NORMAL_COLORS = [0xFF6B6B, 0x66B3FF, 0x66DD66, 0xFF99CC, 0xFF9944];
+
 // ─── MenuScene ────────────────────────────────────────────────────────────────
 class MenuScene extends Phaser.Scene {
   constructor() { super('MenuScene'); }
@@ -130,6 +141,27 @@ class GameScene extends Phaser.Scene {
     // HUD (drawn last so it's on top)
     this._buildHUD();
 
+    // Difficulty state
+    this.elapsed = 0;
+    this.spawnDelay = 1800; // ms between spawns (decreases over time)
+    this.speedMult  = 1.0;
+
+    // Spawn timer
+    this.spawnTimer = this.time.addEvent({
+      delay: this.spawnDelay,
+      callback: this._spawnBalloon,
+      callbackScope: this,
+      loop: true,
+    });
+
+    // Difficulty ramp every 30s
+    this.time.addEvent({
+      delay: 30000,
+      callback: this._rampDifficulty,
+      callbackScope: this,
+      loop: true,
+    });
+
     // Input
     this.input.on('pointermove', (ptr) => this._aimCannon(ptr));
     this.input.on('pointerdown', (ptr) => this._fireBullet(ptr));
@@ -173,11 +205,104 @@ class GameScene extends Phaser.Scene {
     }).setOrigin(1, 0);
   }
 
-  update() {
-    // Destroy bullets that leave the screen (slice() prevents mutation-during-iteration)
+  _pickBalloonType() {
+    const elapsed = this.elapsed;
+    const pool = ['normal'];
+    if (elapsed >= 120) pool.push('fast', 'tank');
+    if (elapsed >= 240) pool.push('golden', 'bomb');
+
+    // Weighted random from pool
+    const weights = pool.map(t => BALLOON_TYPES[t].weight);
+    const total = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < pool.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return pool[i];
+    }
+    return 'normal';
+  }
+
+  _spawnBalloon() {
+    const { width, height } = this.scale;
+    const typeName = this._pickBalloonType();
+    const def = BALLOON_TYPES[typeName];
+    const color = def.color ?? NORMAL_COLORS[Phaser.Math.Between(0, NORMAL_COLORS.length - 1)];
+    const r = 22;
+    const x = Phaser.Math.Between(r + 10, width - r - 10);
+
+    // Draw balloon graphic
+    const g = this.add.graphics();
+    g.fillStyle(color, 1);
+    g.fillEllipse(0, 0, r * 2, r * 2.4);
+    // Shine highlight
+    g.fillStyle(0xFFFFFF, 0.28);
+    g.fillEllipse(-r * 0.25, -r * 0.32, r * 0.65, r * 0.7);
+    // Bomb fuse marker
+    if (typeName === 'bomb') {
+      g.fillStyle(0xFF6600, 1);
+      g.fillRect(-2, -r * 1.3, 4, r * 0.5);
+    }
+    // Golden shimmer
+    if (typeName === 'golden') {
+      g.fillStyle(0xFFFFAA, 0.5);
+      g.fillEllipse(0, 0, r * 1.6, r * 2.0);
+    }
+    // String
+    g.lineStyle(1.5, 0x888888, 1);
+    g.strokeLineShape(new Phaser.Geom.Line(0, r * 1.2, 0, r * 2.2));
+
+    g.setPosition(x, height + r * 2.5);
+    this.physics.add.existing(g);
+    g.body.setVelocityY(-def.speed * this.speedMult);
+    g.body.setAllowGravity(false);
+    g.body.setSize(r * 2, r * 2.4);
+
+    // Metadata
+    g.balloonType = typeName;
+    g.hp = def.hp;
+    g.points = def.points;
+    g.radius = r;
+
+    this.balloons.add(g);
+  }
+
+  _rampDifficulty() {
+    this.spawnDelay = Math.max(500, this.spawnDelay - 150);
+    this.speedMult  = Math.min(2.5, this.speedMult + 0.12);
+    this.spawnTimer.reset({
+      delay: this.spawnDelay,
+      callback: this._spawnBalloon,
+      callbackScope: this,
+      loop: true,
+    });
+  }
+
+  update(time, delta) {
+    this.elapsed += delta / 1000;
+
+    // Destroy off-screen bullets (slice() prevents mutation-during-iteration)
     this.bullets.getChildren().slice().forEach(b => {
       if (b.active && (b.y < -20 || b.x < -20 || b.x > this.scale.width + 20)) b.destroy();
     });
+
+    // Check balloons that escaped the top
+    const escaped = this.balloons.getChildren().filter(b => b.active && b.y < -60);
+    escaped.forEach(b => {
+      b.destroy();
+      this._loseLife();
+    });
+  }
+
+  _loseLife() {
+    this.lives--;
+    const hearts = '❤️'.repeat(Math.max(0, this.lives));
+    this.livesTxt.setText(hearts || '💀');
+    if (this.lives <= 0) {
+      this.spawnTimer.remove();
+      this.time.delayedCall(400, () => {
+        this.scene.start('GameOverScene', { score: this.score });
+      });
+    }
   }
 }
 
