@@ -243,7 +243,7 @@ class GameScene extends Phaser.Scene {
     // Pop particle burst (circles expanding outward)
     for (let i = 0; i < 8; i++) {
       const angle = (i / 8) * Math.PI * 2;
-      const color = balloon.getData?.('color') ?? 0xFFAAAA;
+      const color = balloon.color ?? 0xFFAAAA;
       const particle = this.add.circle(x, y, 5, color);
       this.tweens.add({
         targets: particle,
@@ -278,9 +278,9 @@ class GameScene extends Phaser.Scene {
       onComplete: () => ring.destroy(),
     });
 
-    // Destroy nearby balloons
+    // Destroy nearby balloons (exclude other bombs to prevent cascade chains)
     const nearby = this.balloons.getChildren().filter(b => {
-      return b.active && Phaser.Math.Distance.Between(x, y, b.x, b.y) <= radius;
+      return b.active && b.balloonType !== 'bomb' && Phaser.Math.Distance.Between(x, y, b.x, b.y) <= radius;
     });
     nearby.forEach(b => {
       this.time.delayedCall(Phaser.Math.Between(0, 150), () => {
@@ -347,6 +347,7 @@ class GameScene extends Phaser.Scene {
     g.hp = def.hp;
     g.points = def.points;
     g.radius = r;
+    g.color = color;  // store resolved color for pop particles
 
     this.balloons.add(g);
   }
