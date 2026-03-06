@@ -41,6 +41,10 @@ class MenuScene extends Phaser.Scene {
     const btnBg = this.add.graphics();
     btnBg.fillStyle(0xFF4444, 1);
     btnBg.fillRoundedRect(width / 2 - 90, height * 0.65, 180, 52, 14);
+    btnBg.setInteractive(
+      new Phaser.Geom.Rectangle(width / 2 - 90, height * 0.65, 180, 52),
+      Phaser.Geom.Rectangle.Contains
+    );
 
     const btn = this.add.text(width / 2, height * 0.65 + 26, 'PLAY', {
       fontSize: '30px',
@@ -49,19 +53,19 @@ class MenuScene extends Phaser.Scene {
       color: '#FFFFFF',
       stroke: '#880000',
       strokeThickness: 4,
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    }).setOrigin(0.5);
 
-    btn.on('pointerover', () => {
+    btnBg.on('pointerover', () => {
       btnBg.clear();
       btnBg.fillStyle(0xFF6666, 1);
       btnBg.fillRoundedRect(width / 2 - 90, height * 0.65, 180, 52, 14);
     });
-    btn.on('pointerout', () => {
+    btnBg.on('pointerout', () => {
       btnBg.clear();
       btnBg.fillStyle(0xFF4444, 1);
       btnBg.fillRoundedRect(width / 2 - 90, height * 0.65, 180, 52, 14);
     });
-    btn.on('pointerdown', () => this.scene.start('GameScene'));
+    btnBg.on('pointerdown', () => this.scene.start('GameScene'));
   }
 
   _drawBalloon(x, y, r, color) {
