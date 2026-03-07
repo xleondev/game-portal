@@ -117,11 +117,10 @@ class GameScene extends Phaser.Scene {
     this.lastFired = 0;
     this.fireCooldown = 300;
 
-    // Physics groups
-    this.bullets  = this.physics.add.group();
+    // Bullets: plain array, moved manually each frame (avoids texture issues)
+    this.bullets  = [];
+    // Balloons: physics group for velocity-driven movement
     this.balloons = this.physics.add.group();
-
-    this.physics.add.overlap(this.bullets, this.balloons, this._onHit, null, this);
 
     // HUD
     this._buildHUD();
@@ -190,12 +189,7 @@ class GameScene extends Phaser.Scene {
     drawBalloon('balloon_golden', BALLOON_TYPES.golden.color, false, true);
     drawBalloon('balloon_bomb',   BALLOON_TYPES.bomb.color,   true,  false);
 
-    // Bullet texture: 12x12 yellow circle
-    const bGfx = this.add.graphics();
-    bGfx.fillStyle(0xFFD700, 1);
-    bGfx.fillCircle(6, 6, 6);
-    bGfx.generateTexture('bullet', 12, 12);
-    bGfx.destroy();
+    // (bullet uses this.add.circle — no texture needed)
   }
 
   // ── Aim cannon ──────────────────────────────────────────────────────────────
@@ -216,14 +210,15 @@ class GameScene extends Phaser.Scene {
     this.lastFired = now;
 
     const angle  = this.cannonPivot.rotation - Math.PI / 2;
-    const speed  = 600;
+    const speed  = 500;
     const startX = this.cannonPivot.x + Math.cos(angle) * 48;
     const startY = this.cannonPivot.y + Math.sin(angle) * 48;
 
-    const bullet = this.physics.add.image(startX, startY, 'bullet');
-    bullet.body.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
-    bullet.body.setAllowGravity(false);
-    this.bullets.add(bullet);
+    // Use add.circle — confirmed working, no texture needed
+    const bullet = this.add.circle(startX, startY, 8, 0xFFD700);
+    bullet._vx = Math.cos(angle) * speed;
+    bullet._vy = Math.sin(angle) * speed;
+    this.bullets.push(bullet);
   }
 
   // ── HUD ─────────────────────────────────────────────────────────────────────
@@ -240,8 +235,7 @@ class GameScene extends Phaser.Scene {
 
   // ── Collision handler ────────────────────────────────────────────────────────
   _onHit(bullet, balloon) {
-    if (!bullet.active || !balloon.active) return;
-    bullet.destroy();
+    if (!balloon.active) return;
     balloon.hp--;
 
     if (balloon.hp > 0) {
@@ -358,15 +352,40 @@ class GameScene extends Phaser.Scene {
   // ── Update loop ──────────────────────────────────────────────────────────────
   update(time, delta) {
     this.elapsed += delta / 1000;
+    const dt = delta / 1000;
+    const { width } = this.scale;
 
-    // Clean up off-screen bullets
-    this.bullets.getChildren().slice().forEach(b => {
-      if (b.active && (b.y < -20 || b.x < -20 || b.x > this.scale.width + 20)) {
+    // Move bullets manually and check collision
+    for (let i = this.bullets.length - 1; i >= 0; i--) {
+      const b = this.bullets[i];
+      if (!b.active) { this.bullets.splice(i, 1); continue; }
+
+      b.x += b._vx * dt;
+      b.y += b._vy * dt;
+
+      // Off-screen → destroy
+      if (b.y < -20 || b.x < -20 || b.x > width + 20) {
         b.destroy();
+        this.bullets.splice(i, 1);
+        continue;
       }
-    });
 
-    // Remove escaped balloons
+      // Collision with balloons
+      let hit = false;
+      for (const bal of this.balloons.getChildren()) {
+        if (!bal.active) continue;
+        if (Phaser.Math.Distance.Between(b.x, b.y, bal.x, bal.y) < bal.radius + 8) {
+          b.destroy();
+          this.bullets.splice(i, 1);
+          this._onHit(b, bal);
+          hit = true;
+          break;
+        }
+      }
+      if (hit) continue;
+    }
+
+    // Remove balloons that escaped the top
     const escaped = this.balloons.getChildren().filter(b => b.active && b.y < -60);
     escaped.forEach(b => {
       b.destroy();
