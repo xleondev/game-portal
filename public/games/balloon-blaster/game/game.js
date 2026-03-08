@@ -113,7 +113,7 @@ class MenuScene extends Phaser.Scene {
       new Phaser.Geom.Rectangle(width / 2 - 92, height * 0.63, 184, 54),
       Phaser.Geom.Rectangle.Contains
     );
-    this.add.text(width / 2, height * 0.63 + 27, '🎯  PLAY', {
+    this.add.text(width / 2, height * 0.63 + 27, '▶  PLAY', {
       fontSize: '30px', fontFamily: 'Arial Black, sans-serif', fontStyle: 'bold',
       color: '#FFFFFF', stroke: '#880000', strokeThickness: 4,
     }).setOrigin(0.5);
@@ -302,7 +302,7 @@ class GameScene extends Phaser.Scene {
     this._buildComboHUD();
 
     // Hint text
-    const hint = this.add.text(width / 2, height * 0.47, '🎈  Click to shoot!', {
+    const hint = this.add.text(width / 2, height * 0.47, 'Click to shoot!', {
       fontSize: '20px', fontFamily: 'Arial, sans-serif',
       color: '#FFFFFF', stroke: '#000000', strokeThickness: 3,
     }).setOrigin(0.5).setDepth(10);
@@ -949,7 +949,7 @@ class GameOverScene extends Phaser.Scene {
       new Phaser.Geom.Rectangle(width / 2 - 113, btnY, 226, 53),
       Phaser.Geom.Rectangle.Contains
     );
-    this.add.text(width / 2, btnY + 26.5, '🔄  PLAY AGAIN', {
+    this.add.text(width / 2, btnY + 26.5, '↺  PLAY AGAIN', {
       fontSize: '26px', fontFamily: 'Arial Black, sans-serif', fontStyle: 'bold',
       color: '#FFFFFF', stroke: '#006622', strokeThickness: 3,
     }).setOrigin(0.5);
