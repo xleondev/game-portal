@@ -101,7 +101,8 @@ function newGame() {
 }
 
 // ─── Init ────────────────────────────────────────────────────────────────────
+// overlayBtn behavior is set contextually via .onclick in handleMove (win vs game-over)
 newGameBtn.addEventListener('click', newGame);
-overlayBtn.addEventListener('click', newGame);
+overlayBtn.onclick = newGame; // default; overridden to "Keep Playing" on win
 
 newGame();
