@@ -16,5 +16,14 @@
     "tags": ["shooter", "arcade", "casual"],
     "featured": false,
     "publishedAt": "2026-03-06"
+  },
+  {
+    "slug": "2048",
+    "title": "2048",
+    "description": "Slide tiles on a 4×4 grid to merge matching numbers. Reach the 2048 tile to win!",
+    "thumbnail": "/games/2048/thumbnail.svg",
+    "tags": ["puzzle", "casual", "strategy"],
+    "featured": false,
+    "publishedAt": "2026-03-08"
   }
 ]
