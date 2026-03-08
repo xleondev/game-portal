@@ -147,6 +147,7 @@ h1 {
   font-weight: 700;
   cursor: pointer;
   margin-top: 8px;
+  transition: background 0.15s;
 }
 
 #overlay-btn:hover { background: #7a6856; }
