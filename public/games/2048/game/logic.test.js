@@ -28,31 +28,30 @@ describe('slideRow', () => {
 });
 
 describe('moveBoard', () => {
-  it('moves left correctly', () => {
+  it('moves left correctly — full board', () => {
     const board = [2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const result = moveBoard(board, 'left');
-    expect(result.board[0]).toBe(4);
-    expect(result.board[1]).toBe(0);
+    expect(result.board).toEqual([4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     expect(result.score).toBe(4);
   });
 
-  it('moves right correctly', () => {
+  it('moves right correctly — full board', () => {
     const board = [2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const result = moveBoard(board, 'right');
-    expect(result.board[3]).toBe(4);
-    expect(result.board[2]).toBe(0);
+    expect(result.board).toEqual([0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
 
-  it('moves up correctly', () => {
+  it('moves up correctly — full board', () => {
+    // col 0 has 2 at row 0 and row 3; other cols empty
     const board = [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0];
     const result = moveBoard(board, 'up');
-    expect(result.board[0]).toBe(4); // col 0, row 0
+    expect(result.board).toEqual([4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   });
 
-  it('moves down correctly', () => {
+  it('moves down correctly — full board', () => {
     const board = [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0];
     const result = moveBoard(board, 'down');
-    expect(result.board[12]).toBe(4); // col 0, row 3
+    expect(result.board).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0]);
   });
 
   it('returns unchanged=true when no movement possible', () => {
@@ -109,6 +108,12 @@ describe('checkGameOver', () => {
   it('returns false when adjacent merges are possible', () => {
     // Row of 2,2,4,8 — 2 and 2 can merge
     const board = [2, 2, 4, 8, 4, 8, 16, 32, 8, 16, 32, 64, 16, 32, 64, 128];
+    expect(checkGameOver(board)).toBe(false);
+  });
+
+  it('returns false when only vertical merge is possible', () => {
+    // No horizontal adjacencies, but col 0 row 0 and col 0 row 1 match
+    const board = [2, 4, 8, 16, 2, 8, 16, 32, 4, 16, 32, 64, 8, 32, 64, 128];
     expect(checkGameOver(board)).toBe(false);
   });
 

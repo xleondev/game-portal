@@ -57,7 +57,7 @@ export function moveBoard(board, direction) {
 /** Place a 2 (90%) or 4 (10%) on a random empty cell. Returns new board. */
 export function addRandomTile(board) {
   const empty = board.map((v, i) => v === 0 ? i : -1).filter(i => i !== -1);
-  if (empty.length === 0) return board;
+  if (empty.length === 0) return [...board];
   const idx = empty[Math.floor(Math.random() * empty.length)];
   const val = Math.random() < 0.9 ? 2 : 4;
   const next = [...board];
