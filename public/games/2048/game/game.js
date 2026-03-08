@@ -106,3 +106,38 @@ newGameBtn.addEventListener('click', newGame);
 overlayBtn.onclick = newGame; // default; overridden to "Keep Playing" on win
 
 newGame();
+
+// ─── Keyboard input ─────────────────────────────────────────────────────────
+const KEY_MAP = {
+  ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down',
+  a: 'left', d: 'right', w: 'up', s: 'down',
+};
+
+document.addEventListener('keydown', (e) => {
+  const dir = KEY_MAP[e.key];
+  if (dir) {
+    e.preventDefault();
+    handleMove(dir);
+  }
+});
+
+// ─── Touch / swipe input ────────────────────────────────────────────────────
+let touchStartX = 0;
+let touchStartY = 0;
+const MIN_SWIPE = 30;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) < MIN_SWIPE && Math.abs(dy) < MIN_SWIPE) return;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    handleMove(dx > 0 ? 'right' : 'left');
+  } else {
+    handleMove(dy > 0 ? 'down' : 'up');
+  }
+});
