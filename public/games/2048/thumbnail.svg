@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#faf8ef"/>
+
+  <!-- Title -->
+  <text x="200" y="38" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="36" font-weight="700" fill="#776e65" text-anchor="middle">2048</text>
+
+  <!-- Board background -->
+  <rect x="60" y="52" width="280" height="220" rx="10" fill="#bbada0"/>
+
+  <!-- Empty cells -->
+  <rect x="72" y="64" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="138" y="64" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="204" y="64" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="72" y="130" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="138" y="130" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="72" y="196" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="138" y="196" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+  <rect x="204" y="196" width="56" height="56" rx="5" fill="rgba(238,228,218,0.35)"/>
+
+  <!-- 256 tile -->
+  <rect x="270" y="64" width="56" height="56" rx="5" fill="#edcc61"/>
+  <text x="298" y="99" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#f9f6f2" text-anchor="middle">256</text>
+
+  <!-- 512 tile -->
+  <rect x="204" y="130" width="56" height="56" rx="5" fill="#edc850"/>
+  <text x="232" y="165" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="18" font-weight="700" fill="#f9f6f2" text-anchor="middle">512</text>
+
+  <!-- 1024 tile -->
+  <rect x="270" y="130" width="56" height="56" rx="5" fill="#edc53f"/>
+  <text x="298" y="165" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="15" font-weight="700" fill="#f9f6f2" text-anchor="middle">1024</text>
+
+  <!-- 2048 tile (golden, bottom-right) -->
+  <rect x="270" y="196" width="56" height="56" rx="5" fill="#edc22e"/>
+  <text x="298" y="231" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="15" font-weight="700" fill="#f9f6f2" text-anchor="middle">2048</text>
+</svg>
