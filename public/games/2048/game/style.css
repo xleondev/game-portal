@@ -1,0 +1,158 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  background: #faf8ef;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 16px;
+  touch-action: none;
+}
+
+#app {
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #776e65;
+}
+
+.score-box {
+  background: #bbada0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.score-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #eee4da;
+  letter-spacing: 0.05em;
+}
+
+#score {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+#controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+#new-game-btn {
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#new-game-btn:hover { background: #7a6856; }
+
+/* ─── Board ──────────────────────────────────────────────────────────────── */
+#board-container {
+  position: relative;
+  background: #bbada0;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tile {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.8rem;
+  transition: transform 0.1s ease;
+  animation: tile-appear 0.1s ease;
+}
+
+.tile-empty {
+  background: rgba(238, 228, 218, 0.35);
+}
+
+@keyframes tile-appear {
+  0%   { transform: scale(0); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ─── Overlay ──────────────────────────────────────────────────────────────── */
+#overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 228, 218, 0.75);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+#overlay.hidden { display: none; }
+
+#overlay-content {
+  text-align: center;
+  padding: 24px;
+}
+
+#overlay-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #776e65;
+  margin-bottom: 16px;
+}
+
+#overlay-btn {
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+#overlay-btn:hover { background: #7a6856; }
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; }
+  .tile { font-size: 1.4rem; }
+}
