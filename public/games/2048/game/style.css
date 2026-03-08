@@ -9,6 +9,10 @@ body {
   min-height: 100vh;
   padding: 16px;
   touch-action: none;
+  overscroll-behavior: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 #app {
@@ -187,4 +191,16 @@ h1 {
 @media (max-width: 480px) {
   h1 { font-size: 2rem; }
   .tile { font-size: 1.4rem; }
+}
+
+/* Landscape / short viewport: compact header so board fits */
+@media (max-height: 500px) {
+  body { padding: 8px; align-items: center; }
+  #header { margin-bottom: 6px; }
+  h1 { font-size: 1.4rem; }
+  #controls { margin-bottom: 6px; }
+  #new-game-btn { padding: 6px 14px; font-size: 0.8rem; }
+  .score-box { padding: 4px 10px; }
+  #score { font-size: 1rem; }
+  .tile { font-size: 1.1rem; }
 }
